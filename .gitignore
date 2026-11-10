@@ -1,0 +1,71 @@
+# Environment & Secrets (NEVER COMMIT KEYS)
+.env
+*.env
+!.env.example
+
+# Internal challenge / stage prompts & scripts
+00_START_HERE.md
+01_SPEC_v2.md
+CLAUDE.md
+DEMO_AND_PITCH.md
+DEMO_SCRIPT*
+stage*.md
+utterances.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Logs & Temp files
+*.log
+tmp/
+temp/
+*.tmp
+
+# Operating System
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Archives
+*.zip
+*.tar.gz
+*.rar

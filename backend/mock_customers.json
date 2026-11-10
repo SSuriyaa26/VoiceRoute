@@ -1,0 +1,38 @@
+[
+  {
+    "id": "C001",
+    "name": "Priya Sharma",
+    "phone": "+91-98765-43210",
+    "plan": "Unlimited 599",
+    "open_tickets": [
+      {
+        "ticket_id": "T-1042",
+        "queue": "Billing",
+        "intent": "billing_issue",
+        "summary": "Disputed charge of ₹249 on October bill"
+      }
+    ]
+  },
+  {
+    "id": "C002",
+    "name": "Rajesh Kumar",
+    "phone": "+91-87654-32109",
+    "plan": "Data Booster 399",
+    "open_tickets": [
+      {
+        "ticket_id": "T-2087",
+        "queue": "Tech Support",
+        "intent": "network_problem",
+        "summary": "Frequent call drops in Koramangala area"
+      }
+    ]
+  },
+  {
+    "id": "C003",
+    "name": "Ananya Iyer",
+    "phone": "+91-76543-21098",
+    "plan": "Prepaid 199",
+    "open_tickets": []
+  }
+]
+

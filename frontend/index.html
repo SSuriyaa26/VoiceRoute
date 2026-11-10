@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoiceRoute — AI Voice Router for Telecom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ── Top Navigation Bar ────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-brand">
+    <div class="brand-icon-wrap">
+      <span class="brand-icon">⚡</span>
+    </div>
+    <div class="brand-titles">
+      <div class="brand-name-row">
+        <h1>VoiceRoute</h1>
+        <span class="badge-version">v2.0</span>
+      </div>
+      <p class="tagline">Next-Gen Telecom Support Routing · Zero DTMF Menus</p>
+    </div>
+  </div>
+
+  <div class="header-status">
+    <span id="fallback-badge" class="badge badge-fallback badge-hidden">
+      <span class="pulse-dot-orange"></span> Fallback Active
+    </span>
+    <div class="provider-pill">
+      <span class="pulse-dot-green"></span>
+      <span id="provider-badge">Connecting…</span>
+    </div>
+    <button id="reset-session-btn" class="btn-reset" title="Reset Session">
+      <span class="reset-icon">↺</span> New Call
+    </button>
+  </div>
+</header>
+
+<!-- ── Main Grid ─────────────────────────────────────────────────────── -->
+<main class="main-grid">
+
+  <!-- LEFT: Interactive Call Center Panel ───────────────────────────── -->
+  <section class="panel panel-left">
+    
+    <!-- Caller & Language Selector Bar -->
+    <div class="controls-card">
+      <div class="control-group">
+        <label for="customer-select" class="control-label">
+          <span class="label-icon">👤</span> Simulated Caller
+        </label>
+        <div class="select-wrapper">
+          <select id="customer-select">
+            <option value="C001">Priya Sharma (Has Open Billing Ticket)</option>
+            <option value="C002">Rajesh Kumar (Has Open Network Ticket)</option>
+            <option value="C003">Ananya Iyer (No Open Tickets)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="language-select" class="control-label">
+          <span class="label-icon">🌐</span> Audio Language
+        </label>
+        <div class="select-wrapper">
+          <select id="language-select">
+            <option value="en-IN">English (India)</option>
+            <option value="hi-IN">Hindi / Hinglish</option>
+            <option value="ta-IN">Tamil / Tanglish</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Caller CRM Profile -->
+    <div id="customer-card" class="customer-card"></div>
+
+    <!-- Live Conversation Stream -->
+    <div id="chat-area" class="chat-area">
+      <div class="chat-welcome">
+        <div class="welcome-badge">🎙️ Voice-First Demo</div>
+        <h3>Welcome to VoiceRoute</h3>
+        <p class="welcome-desc">Say anything naturally or click a sample utterance below to test routing in 1 turn:</p>
+        <div class="sample-chips">
+          <button class="sample-chip" onclick="sendSample('What is the status of my ticket?')">
+            <span class="chip-emoji">🎫</span>
+            <span class="chip-text">"Ticket status"</span>
+            <span class="chip-tag tag-selfserve">Self-Serve</span>
+          </button>
+          <button class="sample-chip" onclick="sendSample('What plan am I on?')">
+            <span class="chip-emoji">📋</span>
+            <span class="chip-text">"What plan am I on?"</span>
+            <span class="chip-tag tag-selfserve">Self-Serve</span>
+          </button>
+          <button class="sample-chip" onclick="sendSample('My bill is too high this month')">
+            <span class="chip-emoji">💳</span>
+            <span class="chip-text">"My bill is too high"</span>
+            <span class="chip-tag tag-route">Route</span>
+          </button>
+          <button class="sample-chip" onclick="sendSample('Mera bill zyada aaya hai')">
+            <span class="chip-emoji">🇮🇳</span>
+            <span class="chip-text">"Mera bill zyada aaya hai"</span>
+            <span class="chip-tag tag-hindi">Hindi</span>
+          </button>
+          <button class="sample-chip" onclick="sendSample('My calls keep dropping and no signal')">
+            <span class="chip-emoji">📶</span>
+            <span class="chip-text">"Calls keep dropping"</span>
+            <span class="chip-tag tag-route">Tech</span>
+          </button>
+          <button class="sample-chip" onclick="sendSample('I have a problem with my plan')">
+            <span class="chip-emoji">❓</span>
+            <span class="chip-text">"Problem with my plan"</span>
+            <span class="chip-tag tag-clarify">Clarify</span>
+          </button>
+          <button class="sample-chip" onclick="sendSample('I want to escalate this to your manager now')">
+            <span class="chip-emoji">🚨</span>
+            <span class="chip-text">"Escalate to manager"</span>
+            <span class="chip-tag tag-escalate">Escalate</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Streaming Interim Banner -->
+    <div id="live-transcript" class="live-transcript hidden">
+      <div class="sound-wave-anim">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <span id="live-transcript-text" class="live-transcript-text">Listening… speak naturally</span>
+    </div>
+
+    <!-- Push-To-Talk Input Bar -->
+    <div class="input-container">
+      <button id="mic-btn" class="mic-btn" title="Push-to-talk: Click to start speaking, click again to finish">
+        <div class="mic-wave-ring"></div>
+        <div class="mic-icon-wrap">
+          <svg class="mic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+          </svg>
+        </div>
+        <span class="mic-caption">TAP TO SPEAK</span>
+      </button>
+
+      <div class="text-input-wrap">
+        <input type="text" id="text-input" placeholder="Speak with mic or type customer utterance here…" />
+        <button id="send-btn" class="send-btn" title="Send query">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT: Real-Time Explainability Brain Panel ───────────────────── -->
+  <section class="panel panel-right">
+    <div class="panel-header">
+      <div class="panel-header-title">
+        <span class="brain-sparkle">🧠</span>
+        <h2>Decision Engine</h2>
+      </div>
+      <span class="panel-subbadge">Deterministic · Rule-Governed</span>
+    </div>
+
+    <!-- Active Routing Decision -->
+    <div class="brain-card decision-card">
+      <div class="card-header-small">
+        <span class="card-label">ROUTING DECISION</span>
+        <span id="decision-rule-tag" class="rule-tag">Rule Evaluation</span>
+      </div>
+      <div class="decision-main">
+        <div id="decision-badge" class="decision-badge decision-idle">IDLE</div>
+        <div class="queue-destination">
+          <span class="queue-sub">DESTINATION QUEUE</span>
+          <span id="queue-label" class="queue-val">Awaiting Utterance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Intents & Calibrated Confidence Bars -->
+    <div class="brain-card">
+      <div class="card-header-small">
+        <span class="card-label">INTENT CONFIDENCE DISTRIBUTION</span>
+        <span class="threshold-legend">Threshold: <strong>≥ 80%</strong> · Margin: <strong>≥ 15%</strong></span>
+      </div>
+      <div id="intent-bars" class="intent-bars">
+        <div class="empty-state">
+          <span class="empty-icon">📊</span>
+          <p>Confidence scores will appear here after the first turn</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Caller Sentiment & Intelligence Metadata Grid -->
+    <div class="brain-card">
+      <div class="card-header-small">
+        <span class="card-label">CALLER SIGNALS & METADATA</span>
+      </div>
+      <div class="metadata-grid">
+        <div class="meta-box">
+          <span class="meta-label">Sentiment</span>
+          <span id="sentiment-badge" class="sentiment-badge sentiment-neutral">—</span>
+        </div>
+        <div class="meta-box">
+          <span class="meta-label">Matched Ticket</span>
+          <span id="ticket-id" class="meta-val highlight-ticket">—</span>
+        </div>
+        <div class="meta-box">
+          <span class="meta-label">NLU Source</span>
+          <span id="nlu-source" class="meta-val">—</span>
+        </div>
+        <div class="meta-box">
+          <span class="meta-label">ASR Mode</span>
+          <span id="asr-provider" class="meta-val">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent Handoff Summary -->
+    <div class="brain-card">
+      <div class="card-header-small">
+        <span class="card-label">AGENT HANDOFF BRIEFING</span>
+        <span class="auto-generated-pill">Auto-Generated</span>
+      </div>
+      <p id="handoff-summary" class="handoff-text">Ready for incoming customer conversation.</p>
+    </div>
+
+    <!-- Stage-by-Stage Latency Benchmarks -->
+    <div class="brain-card timings-card">
+      <div class="card-header-small">
+        <span class="card-label">LATENCY BREAKDOWN</span>
+        <span class="sla-badge">Target &lt; 2.5s</span>
+      </div>
+      <div class="timings-grid">
+        <div class="timing-box">
+          <span class="timing-val" id="timing-asr">—</span>
+          <span class="timing-tag">ASR</span>
+        </div>
+        <div class="timing-box">
+          <span class="timing-val" id="timing-nlu">—</span>
+          <span class="timing-tag">NLU</span>
+        </div>
+        <div class="timing-box">
+          <span class="timing-val" id="timing-router">—</span>
+          <span class="timing-tag">Router</span>
+        </div>
+        <div class="timing-box">
+          <span class="timing-val" id="timing-tts">—</span>
+          <span class="timing-tag">TTS</span>
+        </div>
+        <div class="timing-box total-box">
+          <span class="timing-val timing-total-val" id="timing-total">—</span>
+          <span class="timing-tag">Total E2E</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ── BOTTOM STRIP: Side-by-Side Measured Comparison ────────────────── -->
+<footer class="ivr-strip">
+  <!-- Left Side: Traditional 3-Tier IVR Dialpad -->
+  <div class="ivr-container ivr-traditional-side">
+    <div class="ivr-title-bar">
+      <div class="ivr-title-row">
+        <span class="ivr-icon">📟</span>
+        <h3>Traditional DTMF IVR</h3>
+      </div>
+      <span class="ivr-note">Interactive 3-Tier Menu · Tap keys to navigate</span>
+    </div>
+
+    <div id="ivr-menu" class="ivr-menu-box">
+      <div class="ivr-level" id="ivr-level-1">
+        <div class="ivr-breadcrumbs">Level 1: Main Menu</div>
+        <p class="ivr-prompt">"Press 1 for Billing, 2 for Plans, 3 for Technical Support"</p>
+        <div class="ivr-keypad">
+          <button class="dial-key" onclick="ivrPress(1,1)"><span class="key-num">1</span><span class="key-sub">Billing</span></button>
+          <button class="dial-key" onclick="ivrPress(1,2)"><span class="key-num">2</span><span class="key-sub">Plans</span></button>
+          <button class="dial-key" onclick="ivrPress(1,3)"><span class="key-num">3</span><span class="key-sub">Support</span></button>
+        </div>
+      </div>
+      <div class="ivr-level hidden" id="ivr-level-2"></div>
+      <div class="ivr-level hidden" id="ivr-level-3"></div>
+    </div>
+
+    <div class="ivr-stopwatch-row">
+      <span class="stopwatch-label">Elapsed Navigation Time:</span>
+      <span id="ivr-timer" class="ivr-stopwatch-display">—</span>
+    </div>
+  </div>
+
+  <!-- Center Badge -->
+  <div class="ivr-vs-column">
+    <div class="vs-circle">VS</div>
+    <div class="speed-boost-pill">⚡ 8x Faster</div>
+  </div>
+
+  <!-- Right Side: VoiceRoute Single Turn -->
+  <div class="ivr-container ivr-voiceroute-side">
+    <div class="ivr-title-bar">
+      <div class="ivr-title-row">
+        <span class="ivr-icon">🚀</span>
+        <h3>VoiceRoute AI</h3>
+      </div>
+      <span class="ivr-note">Measured actual time for this caller</span>
+    </div>
+
+    <div class="vr-summary-box">
+      <div class="vr-feature-row">
+        <span class="check-icon">✓</span>
+        <span>Zero Button Presses · Speak Naturally in Any Language</span>
+      </div>
+      <div class="vr-feature-row">
+        <span class="check-icon">✓</span>
+        <span>Single-Turn Resolution Directly to Target Queue</span>
+      </div>
+      <div class="vr-feature-row">
+        <span class="check-icon">✓</span>
+        <span>Instant CRM Open Ticket Priority Routing</span>
+      </div>
+    </div>
+
+    <div class="ivr-stopwatch-row vr-stopwatch-row">
+      <span class="stopwatch-label">Time to Route & Reply:</span>
+      <span id="vr-timer" class="ivr-stopwatch-display vr-timer-highlight">—</span>
+    </div>
+  </div>
+</footer>
+
+<script src="asr.js"></script>
+<script src="tts.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

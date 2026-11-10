@@ -1,0 +1,50 @@
+[
+  {"text": "my bill is too high this month", "language": "en-IN", "expected_intent": "billing_issue", "expected_decision": "route"},
+  {"text": "I got charged extra for something I didn't buy", "language": "en-IN", "expected_intent": "billing_issue", "expected_decision": "route"},
+  {"text": "mera bill zyada aaya hai", "language": "hi-IN", "expected_intent": "billing_issue", "expected_decision": "route"},
+  {"text": "bill mein galat charge laga hai", "language": "hi-IN", "expected_intent": "billing_issue", "expected_decision": "route"},
+  {"text": "I want to make a complaint about a wrong charge", "language": "en-IN", "expected_intent": "billing_issue", "expected_decision": "route"},
+
+  {"text": "I want to recharge my number", "language": "en-IN", "expected_intent": "recharge_plan", "expected_decision": "route"},
+  {"text": "what are the best prepaid plans", "language": "en-IN", "expected_intent": "recharge_plan", "expected_decision": "route"},
+  {"text": "mujhe recharge karna hai", "language": "hi-IN", "expected_intent": "recharge_plan", "expected_decision": "route"},
+  {"text": "plan change karna hai unlimited wala", "language": "hi-IN", "expected_intent": "recharge_plan", "expected_decision": "route"},
+  {"text": "data pack khatam ho gaya recharge karo", "language": "hi-IN", "expected_intent": "recharge_plan", "expected_decision": "route"},
+
+  {"text": "my calls keep dropping", "language": "en-IN", "expected_intent": "network_problem", "expected_decision": "route"},
+  {"text": "there is no signal at my house", "language": "en-IN", "expected_intent": "network_problem", "expected_decision": "route"},
+  {"text": "internet bahut slow chal raha hai", "language": "hi-IN", "expected_intent": "network_problem", "expected_decision": "route"},
+  {"text": "network nahi aa raha yahan", "language": "hi-IN", "expected_intent": "network_problem", "expected_decision": "route"},
+  {"text": "signal keeps going in and out", "language": "en-IN", "expected_intent": "network_problem", "expected_decision": "route"},
+
+  {"text": "I need to activate my new SIM", "language": "en-IN", "expected_intent": "sim_activation", "expected_decision": "route"},
+  {"text": "how do I port my number", "language": "en-IN", "expected_intent": "sim_activation", "expected_decision": "route"},
+  {"text": "naya sim card activate karo", "language": "hi-IN", "expected_intent": "sim_activation", "expected_decision": "route"},
+
+  {"text": "I want to cancel my plan", "language": "en-IN", "expected_intent": "cancel_service", "expected_decision": "route"},
+  {"text": "please deactivate my account", "language": "en-IN", "expected_intent": "cancel_service", "expected_decision": "route"},
+  {"text": "service band karo meri", "language": "hi-IN", "expected_intent": "cancel_service", "expected_decision": "route"},
+
+  {"text": "get me your manager right now", "language": "en-IN", "expected_intent": "complaint_escalation", "expected_decision": "escalate"},
+  {"text": "I want to escalate this, your service is terrible", "language": "en-IN", "expected_intent": "complaint_escalation", "expected_decision": "escalate"},
+  {"text": "this is unacceptable, connect me to a supervisor", "language": "en-IN", "expected_intent": "complaint_escalation", "expected_decision": "escalate"},
+
+  {"text": "let me talk to a real person", "language": "en-IN", "expected_intent": "talk_to_agent", "expected_decision": "route"},
+  {"text": "agent se baat karni hai", "language": "hi-IN", "expected_intent": "talk_to_agent", "expected_decision": "route"},
+
+  {"text": "I have a problem with my plan", "language": "en-IN", "expected_intent": null, "expected_decision": "clarify"},
+  {"text": "kuch problem hai", "language": "hi-IN", "expected_intent": null, "expected_decision": "clarify"},
+
+  {"text": "", "language": "en-IN", "expected_intent": null, "expected_decision": "reprompt"},
+  {"text": "   ", "language": "en-IN", "expected_intent": null, "expected_decision": "reprompt"},
+
+  {"text": "I'm so angry, nothing works and nobody helps me", "language": "en-IN", "expected_intent": null, "expected_decision": "escalate"},
+  {"text": "bahut gussa aa raha hai, koi kuch nahi karta", "language": "hi-IN", "expected_intent": null, "expected_decision": "escalate"},
+
+  {"text": "en kattanam athigamaga irukkuthu", "language": "ta-IN", "expected_intent": "billing_issue", "expected_decision": "route"},
+  {"text": "signal varala inga", "language": "ta-IN", "expected_intent": "network_problem", "expected_decision": "route"},
+
+  {"text": "bill ke baare mein baat karni hai lekin network bhi theek nahi hai", "language": "hi-IN", "expected_intent": "billing_issue", "expected_decision": "route"},
+  {"text": "yeh sab kya hai, manager se baat karo meri complaint hai", "language": "hi-IN", "expected_intent": "complaint_escalation", "expected_decision": "escalate"}
+]
+
