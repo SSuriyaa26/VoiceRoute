@@ -80,6 +80,7 @@ def route(
     can_reprompt: bool,
     clarification_context: dict | None = None,
     open_tickets: list[dict[str, Any]] | None = None,
+    nlu_source: str = "llm",
 ) -> dict[str, Any]:
     """
     Evaluate routing rules in spec order.
@@ -201,7 +202,8 @@ def route(
         }
 
     # ── Rule 3: High-confidence route ──────────────────────────────────
-    if top_conf >= ROUTE_CONFIDENCE_THRESHOLD and margin >= ROUTE_MARGIN_THRESHOLD:
+    threshold = 0.70 if nlu_source == "keyword_fallback" else ROUTE_CONFIDENCE_THRESHOLD
+    if top_conf >= threshold and margin >= ROUTE_MARGIN_THRESHOLD:
         queue = _get_queue(top_name)
         ticket_id = _match_ticket(top_name, open_tickets)
         if ticket_id and open_tickets:

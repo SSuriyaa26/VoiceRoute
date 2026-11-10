@@ -63,7 +63,7 @@ def _keyword_classify(transcript: str) -> list[dict[str, Any]]:
     for intent, keywords in _KEYWORD_MAP.items():
         hits = sum(1 for kw in keywords if kw in text)
         if hits > 0:
-            scores[intent] = min(0.75, 0.30 + hits * 0.15)
+            scores[intent] = min(0.75, 0.60 + hits * 0.10)
 
     if not scores:
         return [{"name": "talk_to_agent", "confidence": 0.20}]
@@ -155,55 +155,59 @@ def analyze(
 
     # ── Try Gemini first ───────────────────────────────────────────────
     if api_key:
-        try:
-            client = _get_gemini_client(api_key)
-            user_msg = _build_user_message(
-                transcript, language_hint, clarification_context
-            )
+        for attempt in range(2):
+            try:
+                client = _get_gemini_client(api_key)
+                user_msg = _build_user_message(
+                    transcript, language_hint, clarification_context
+                )
 
-            start = time.perf_counter()
-            response = client.models.generate_content(
-                model=llm_model,
-                contents=user_msg,
-                config=types.GenerateContentConfig(
-                    system_instruction=_SYSTEM_PROMPT,
-                    response_mime_type="application/json",
-                    temperature=0.0,
-                ),
-            )
-            latency_ms = int((time.perf_counter() - start) * 1000)
+                start = time.perf_counter()
+                response = client.models.generate_content(
+                    model=llm_model,
+                    contents=user_msg,
+                    config=types.GenerateContentConfig(
+                        system_instruction=_SYSTEM_PROMPT,
+                        response_mime_type="application/json",
+                        temperature=0.0,
+                    ),
+                )
+                latency_ms = int((time.perf_counter() - start) * 1000)
 
-            parsed = _parse_llm_response(response.text)
+                parsed = _parse_llm_response(response.text)
 
-            # Validate intents
-            validated_intents: list[dict[str, Any]] = []
-            for intent in parsed.get("intents", []):
-                name = intent.get("name", "")
-                conf = float(intent.get("confidence", 0))
-                if name in VALID_INTENTS:
-                    validated_intents.append(
-                        {"name": name, "confidence": round(conf, 2)}
-                    )
+                # Validate intents
+                validated_intents: list[dict[str, Any]] = []
+                for intent in parsed.get("intents", []):
+                    name = intent.get("name", "")
+                    conf = float(intent.get("confidence", 0))
+                    if name in VALID_INTENTS:
+                        validated_intents.append(
+                            {"name": name, "confidence": round(conf, 2)}
+                        )
 
-            if not validated_intents:
-                validated_intents = [{"name": "talk_to_agent", "confidence": 0.20}]
+                if not validated_intents:
+                    validated_intents = [{"name": "talk_to_agent", "confidence": 0.20}]
 
-            # Validate sentiment
-            sentiment = parsed.get("sentiment", "neutral")
-            if sentiment not in VALID_SENTIMENTS:
-                sentiment = "neutral"
+                # Validate sentiment
+                sentiment = parsed.get("sentiment", "neutral")
+                if sentiment not in VALID_SENTIMENTS:
+                    sentiment = "neutral"
 
-            result = {
-                "intents": validated_intents,
-                "entities": parsed.get("entities", {}),
-                "sentiment": sentiment,
-                "language": parsed.get("language", "en"),
-                "reply_text": parsed.get("reply_text", ""),
-            }
-            return result, "llm", latency_ms
+                result = {
+                    "intents": validated_intents,
+                    "entities": parsed.get("entities", {}),
+                    "sentiment": sentiment,
+                    "language": parsed.get("language", "en"),
+                    "reply_text": parsed.get("reply_text", ""),
+                }
+                return result, "llm", latency_ms
 
-        except Exception as e:
-            logger.warning("Gemini NLU failed, falling back to keywords: %s", e)
+            except Exception as e:
+                if attempt == 0:
+                    time.sleep(0.35)
+                    continue
+                logger.warning("Gemini NLU failed, falling back to keywords: %s", e)
 
     # ── Keyword fallback ───────────────────────────────────────────────
     start = time.perf_counter()

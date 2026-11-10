@@ -220,6 +220,7 @@ def route_endpoint(req: RouteRequest) -> RouteResponse:
         can_reprompt=session.can_reprompt(req.session_id),
         clarification_context=clar_ctx,
         open_tickets=open_tickets,
+        nlu_source=nlu_source,
     )
     router_ms = int((time.perf_counter() - router_start) * 1000)
 
