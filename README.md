@@ -1,7 +1,8 @@
 # VoiceRoute ⚡
 
-> **A voice-first, AI-powered telecom customer support router that eliminates "Press 1 for X" IVR menus entirely.**
-> Built for the **Gnani.ai Building Challenge**.
+> **A voice-first, AI-powered telecom customer support router that eliminates "Press 1 for X" IVR menus entirely.**  
+> Built for the **Gnani.ai Building Challenge**.  
+> 📄 **Solution Pitch Document (1 Page)**: [`PITCH.md`](PITCH.md)
 
 A caller speaks naturally in their preferred language (**English, Hindi, Tamil, or code-mixed Hinglish/Tanglish**). In a single turn, VoiceRoute identifies their intent, extracts key entities, measures sentiment, matches existing CRM tickets, and makes an explainable, deterministic routing decision — speaking back a fluent native reply.
 
@@ -35,9 +36,9 @@ A caller speaks naturally in their preferred language (**English, Hindi, Tamil, 
 
 ---
 
-## 🚀 Live Demo Script
+## 📄 Solution Pitch (1 Page)
 
-👉 **See [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md)** for a complete 3-minute presentation script with exact speaker notes, live scenarios, and click-through presets.
+👉 **See [`PITCH.md`](PITCH.md)** for our official 1-page solution pitch covering problem statement, business value, architecture, and measurable impact.
 
 ---
 
@@ -118,9 +119,7 @@ python tests/eval.py --limit 10 --delay 1.5
 
 ```
 voiceroute/
-  ├── DEMO_SCRIPT.md           # 3-minute pitch & live demonstration guide
-  ├── CLAUDE.md                # Hard rules, constraints, and project context
-  ├── 01_SPEC_v2.md            # Original architectural specification
+  ├── PITCH.md                 # 1-page official solution pitch
   ├── .gitignore               # Secrets and build artifact exclusion
   ├── .env.example             # Template for API credentials
   ├── requirements.txt         # Python package dependencies
